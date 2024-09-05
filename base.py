@@ -7,7 +7,7 @@ from matplotlib import pyplot as plt
 from matplotlib import rc
 from sklearn.cluster import KMeans
 
-
+#
 # xlsx source import
 data = pd.read_excel('sample_data.xlsx',
                      sheet_name='sheet1')
