@@ -7,4 +7,4 @@ numpy,
 
 pandas,
 
-skipy
+scipy
