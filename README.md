@@ -5,4 +5,6 @@ matplotlib,
 
 numpy,
 
-pandas
+pandas,
+
+scipy
