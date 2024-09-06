@@ -1,8 +1,4 @@
 # Clustering
-Hi guys and gals. Here some sample of k-means clustering & hierarchical cluster solved via:
+Hi guys and gals. Here some sample of k-means clustering & hierarchical cluster solution:
 
-matplotlib,
 
-numpy,
-
-pandas
