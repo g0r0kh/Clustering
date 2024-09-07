@@ -17,13 +17,15 @@ data = pd.read_excel('sample_data.xlsx',
 
 col = ['ССЧ', 'Выручка']
 
-# from pandas.plotting import scatter_matrix
-# scatter_matrix(data[col], alpha=0.05, figsize=(10, 10))
-# plt.show()
+from pandas.plotting import scatter_matrix
+scatter_matrix(data[col], alpha=0.05, figsize=(10, 10))
+plt.show()
 
-# data[col].corr()
+data[col].corr()
 from sklearn import preprocessing
 dataNorm = preprocessing.MinMaxScaler().fit_transform(data[col].values)
+
+
 
 data_dist = pdist(dataNorm, 'euclidean')
 data_linkage = linkage(data_dist, method='average')
@@ -81,6 +83,7 @@ fancy_dendrogram(
     show_contracted=True,
     annotate_above=10,
 )
+plt.grid()
 plt.show()
 
 
@@ -101,3 +104,37 @@ data['I']=clusters
 res=data.groupby('I')[col].mean()
 res['Количество']=data.groupby('I').size().values
 print(res) #ниже средние цифры по кластерам и количество объектов (Количество)
+
+# строим кластеризаци методом KMeans
+km = KMeans(n_clusters=nClust).fit(dataNorm)
+
+# выведем полученное распределение по кластерам
+# так же номер кластера, к котрому относится строка, так как нумерация начинается с нуля, выводим добавляя 1
+km.labels_ +1
+
+x=0 # Чтобы построить диаграмму в разных осях, меняйте номера столбцов
+y=1 #
+centroids = km.cluster_centers_
+plt.figure(figsize=(10, 8))
+plt.scatter(dataNorm[:,x], dataNorm[:,y], c=km.labels_, cmap='flag')
+plt.scatter(centroids[:, x], centroids[:, y], marker='*', s=300,
+            c='r', label='centroid')
+plt.xlabel(col[x])
+plt.ylabel(col[y])
+plt.show()
+
+
+
+# к оригинальным данным добавляем номера кластеров
+data['KMeans']=km.labels_+1
+res=data.groupby('KMeans')[col].mean()
+res['Количество']=data.groupby('KMeans').size().values
+res
+
+data[data['KMeans']==6] # изменяйте номер кластера, содержание которого хотите просмотреть
+
+# data[data['KMeans']==4][['Review', 'Star', 'ordersCount', 'Value', 'brandName', 'goodsName',
+#        'Мощность устройства', 'Объем чайника', 'Цвет']]
+
+# сохраним результаты в файл
+data.to_excel('result_claster.xlsx', index=False)
